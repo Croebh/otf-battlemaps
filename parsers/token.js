@@ -1,3 +1,5 @@
+import Overlay from "../overlay.js";
+
 const flagLookups = new Map([
   ["g", "forestgreen"],
   ["r", "firebrick"],
@@ -37,22 +39,13 @@ export default class TokenParser {
         if (sizes.includes(char)) size = flagLookups.get(char);
       }
 
-      const coords = matches[1] || "";
-      const code = (coords[0] || "").charCodeAt(0);
-      let x;
-      if (code > 64 && code < 91) {
-        x = code - 64;
-      } else {
-        x = code - 70;
-      }
-
-      return {
-        x,
-        y: parseInt(coords.substr(1) || "", 10),
+      return new Overlay({
+        cell: matches[1],
         color,
         size,
+        type: 'token',
         label: matches[4] || "",
-      };
+      });
     }
 
     return false;
