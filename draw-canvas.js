@@ -16,6 +16,7 @@ export default function main(pathname, backgroundImage) {
   const width = (input.board.width >= 52 ? 52 : input.board.width) * gridsize;
   const height =
     (input.board.height >= 52 ? 52 : input.board.height) * gridsize;
+  
   const options = new Options({
     padding: PADDING,
     gridsize,
@@ -38,31 +39,26 @@ export default function main(pathname, backgroundImage) {
     gridOpacity: input.gridOpacity,
   });
 
+  // TODO: refactor to match the TODO below
   board.addBackground(backgroundImage || input.background);
-
   for (const { x, y, item } of input.icons) {
     board.placeItem(x, y, item);
   }
-
   board.addLines(input.lines);
-
-  // TODO: recalculate icons by inspecting the data structure
-
   board.draw();
 
-  // for (const { x, y, item } of input.tokens) {
-    // renderer.render({ x, y, item });
-    // board.placeItem(x, y, item);
+  // TODO: replace board implementation with these methods
+  // renderer.drawAxis(grid);
+  // renderer.drawGridLines(grid);
+  // for (const wall of walls) {
+  //   renderer.drawWall(wall);
+  // }
+  // for (const effect of effects) {
+  //   renderer.drawEffect(effect);
   // }
 
-
-  // NEW...............
-
-  // const input = new InputParser(pathname);
-  // const options = new Options();
   const grid = new Grid(options);
 
-  // handles z-index and items that span multiple grid cells
   for (const overlay of input.overlays) {
     grid.add(overlay);
   }
@@ -71,19 +67,9 @@ export default function main(pathname, backgroundImage) {
     grid.add(overlay);
   }
 
-  // renderer.drawAxis(grid);
-  // renderer.drawGridLines(grid);
   for (const cell of grid) {
     renderer.renderOverlay(cell);
   }
-
-  // for (const wall of walls) {
-  //   renderer.drawWall(wall);
-  // }
-
-  // for (const effect of effects) {
-  //   renderer.drawEffect(effect);
-  // }
 
   return renderer.canv;
 }
